@@ -1,3 +1,5 @@
+
+
 class Card:
     def __init__(self, id, name="", cost=0, damage=0, health=1):
         """
@@ -79,7 +81,7 @@ class Card:
         """
         Helper function to visualize the card in the command line
         """
-        return f"id:{self.id} N:'{self.name}'\nC:{self.cost} A:{self.damage} H:{self.health}\n"
+        return f"|'{self.name}'({self.cost})|{self.damage}/{self.health}|"
 
 
     def __repr__(self):

@@ -1,5 +1,6 @@
 import random
-from Card import Card
+from card import Card
+
 
 class Deck:
     def __init__(self):
@@ -10,7 +11,7 @@ class Deck:
 
     def __str__(self):
         cards = sorted(self._cards, key=lambda card: card.cost)
-        return '\n\n'.join([str(card) for card in cards])
+        return ''.join([str(card) for card in cards])
     
 
     def __repr__(self):
@@ -25,9 +26,10 @@ class Deck:
 
     def removeCard(self):
         if self._cardCount > 0:
-            card = self._cards.pop
+            card = self._cards.pop()
             self._cardCount -= 1
-        return card
+            return card
+        return None
 
 
     def shuffle(self):
@@ -40,18 +42,30 @@ class Hand:
         self._cardCount = 0
         self._size = 8
 
+    
+    @property
+    def cardCount(self):
+        return self._cardCount
+
+
+    def __str__(self):
+        return str(self._cards)
+
 
     def addCard(self, card):
+        if not card:
+            return
         if self._cardCount < self._size:
             self._cards.append(card)
             self._cardCount += 1
     
-    
-    def removeCard(self):
-        if self._cardCount > 0:
-            card = self._cards.pop
+
+    def removeCard(self, pos):
+        if pos < self.cardCount and self._cardCount > 0:
+            card = self._cards.pop(pos)
             self._cardCount -= 1
-        return card
+            return card
+        return None
 
 
 class Player:
@@ -60,6 +74,15 @@ class Player:
         self.hand = Hand()
         self.health = 30
         self.maxHealth = 30
+
+    
+    def drawCard(self):
+        """
+        A function that lets a player draw a card from their deck into their hand
+        """
+        card = self.deck.removeCard()
+        if card:
+            self.hand.addCard(card)
 
 
 if __name__ == "__main__":
