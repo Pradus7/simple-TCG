@@ -1,4 +1,4 @@
-from player import Player
+from Player import Player
 
 
 class Board:
@@ -19,7 +19,7 @@ class Board:
 
     
     def __str__(self):
-        return f"|{self._board[21]}|{self._board[22]}|{self._board[23]}|{self._board[24]}|{self._board[25]}|\n|{self._board[11]}|{self._board[12]}|{self._board[13]}|{self._board[14]}|{self._board[15]}|"
+        return f"|\t{self._board[21]}\t|\t{self._board[22]}\t|\t{self._board[23]}\t|\t{self._board[24]}\t|\t{self._board[25]}\t|\n|\t{self._board[11]}\t|\t{self._board[12]}\t|\t{self._board[13]}\t|\t{self._board[14]}\t|\t{self._board[15]}\t|"
 
 
     def __repr__(self):
@@ -36,7 +36,11 @@ class Board:
             return pos
         return 0
 
+
+    def getCard(self, pos):
+        return self._board[pos]
     
+
     def removeCard(self, pos):
         """
         A function that allows the removal of a card from the game board
@@ -73,24 +77,53 @@ class Game:
                 print("invalid position")
                 return
         
-        if cardPos > player.hand.cardCount:
+        if cardPos >= player.hand.cardCount:
             print("you do not have that card in your hand")
             return
 
         card = player.hand.removeCard(cardPos)
-        self.board.addCard(card, boardPos)
+        if self.board.addCard(card, boardPos) == 0:
+            print("invalid position")
+
+    
+    def attack(self, player, boardPos):
+        """
+        A function that allows a card at the given board position to attack its opposing position
+        """
+        if player is self.p1:
+            if boardPos not in [11, 12, 13, 14, 15]:
+                print("invalid position")
+                return
+
+        if player is self.p2:
+            if boardPos not in [21, 22, 23, 24, 25]:
+                print("invalid position")
+                return
+
+        opponentPos = boardPos + 10 if boardPos < 20 else boardPos - 10
+        selfCard = self.board.getCard(boardPos)
+        opponentCard = self.board.getCard(opponentPos)
+        if opponentCard:
+            selfCard.attack(opponentCard)
+            if self.board.getCard(opponentPos).health <= 0:
+                self.board.removeCard(opponentPos)
+        elif player is self.p1:
+            self.p2.health -= selfCard.attack(opponentCard)
+        elif player is self.p2:
+            self.p1.health -= selfCard.attack(opponentCard)
 
 
 if __name__ == "__main__":
-    from card import Card
+
+    from Card import Card
     import random
 
     g = Game()
 
-    names = ["graverobber", "witch", "slave driver", "mechanical golem", "alleyway thief", "assassin", "pirate", 
-            "warrior", "swordsman", "deadeye", "town guard", "clay golem", "tower mage", "mercenary", "gatekeeper", 
-            "priestess", "merchant", "jailer", "knight", "fortune teller", "necromancer", "squire", "plague doctor", 
-            "steampunk engineer", "soldier", "informant", "templar", "bishop", "holy knight", "wizard"]
+    names = ["graverobber", "witch", "gladiator", "fairy", "thief", "assassin", "pirate", 
+            "warrior", "swordsman", "deadeye", "guard", "clay golem", "archer", "mercenary", "gatekeeper", 
+            "priestess", "merchant", "jailer", "knight", "goblin", "necromancer", "squire", "ogre", 
+            "engineer", "soldier", "horseman", "templar", "bishop", "saint", "wizard"]
 
     random.shuffle(names)
 
@@ -132,24 +165,35 @@ if __name__ == "__main__":
     
     for i in range(10):
         g.p1.drawCard()
-    for i in range(6):
+        print(g.p1.deck.cardCount)
+    for i in range(3):
         g.p2.drawCard()
-
+        print(g.p2.deck.cardCount)
 
     print(g.p1.hand)
     print()
+    print(g.p1.hand.cardCount)
+    print(g.p2.hand.cardCount)
+    print()
 
-    g.play(g.p1, 2, 11)
+    g.play(g.p1, 2, 11) #valid
+    g.play(g.p1, 0, 21) #invalid since it's not the player's side of the board
+    g.play(g.p1, 8, 13) #invalid since the player does not have an 8th card in their hand
+    g.play(g.p1, 3, 13) #valid
+    g.play(g.p1, 1, 11) #invalid card already exists at that position
+    g.play(g.p1, 1, 12) #valid
+    g.play(g.p1, 1, 14) #valid
+    g.play(g.p1, 1, 15) #valid
 
-    g.play(g.p1, 0, 21)
+    g.play(g.p2, 2, 11) #invalid side
+    g.play(g.p2, 1, 23) #valid
+    g.play(g.p2, 1, 21) #valid
+    g.play(g.p2, 0, 22) #valid
+    g.play(g.p2, 0, 24) #invalid, hand ran out of cards
 
-    g.play(g.p1, 8, 13)
-
-    g.play(g.p2, 2, 11)
-
-    g.play(g.p2, 1, 23)
-
-    g.play(g.p1, 3, 13)
+    print(g.p1.hand.cardCount)
+    print(g.p2.hand.cardCount)
+    print()
 
     print(g.board)
     print()
@@ -157,5 +201,30 @@ if __name__ == "__main__":
     print()
     print(g.p2.hand)
 
+    g.attack(g.p1, 13)
 
-    
+    print()
+    print(g.board)
+
+    for i in range(3):
+        g.p2.drawCard()
+        print(g.p2.deck.cardCount)
+
+    g.play(g.p2, 0, 23) #valid
+    g.play(g.p2, 0, 24) #valid
+    #g.play(g.p2, 0, 25) #valid
+
+    print()
+    print(g.board)
+
+    g.attack(g.p1, 11)
+    g.attack(g.p1, 12)
+    g.attack(g.p1, 13)
+    g.attack(g.p1, 14)
+    g.attack(g.p1, 15)
+
+    print()
+    print(g.board)
+
+    print(g.p1.health)
+    print(g.p2.health)

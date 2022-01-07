@@ -24,7 +24,7 @@ class Card:
         self._health = health
         self._maxHealth = health
         self._initHealth = health
-        #self._skills = skills
+        #self._skills = skills #to be implemented
 
 
     #
@@ -93,12 +93,15 @@ class Card:
         #check self buffs and debuffs add them to base_dmg
         total_dmg = base_dmg + 0
 
-        base_health = other.health
-        #check other buffs and debuffs and modify the dmg dealth to base_health
-        remaining_health = base_health - total_dmg*(1)
+        if other:
+            base_health = other.health
+            #check other buffs and debuffs and modify the dmg dealth to base_health
+            remaining_health = base_health - total_dmg*(1)
 
-        #finally subtract dmg dealt from health and apply to card stat
-        other.health = remaining_health
+            #finally subtract dmg dealt from health and apply to card stat
+            other.health = remaining_health
+
+        return total_dmg
 
 
 if __name__ == "__main__":
