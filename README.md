@@ -1,5 +1,5 @@
 # simple-TCG
-A simple CLI based trading card game coded in python that allows 2 players to battle each other using a randomly generated deck
+A simple CLI strategy TCG coded in python that allows 2 players to battle each other
 
 # Current features:
 - Players begin with a pseudo-randomly generated 30 card deck
@@ -20,7 +20,7 @@ A simple CLI based trading card game coded in python that allows 2 players to ba
 - Game turns can be ended by the current player
 - Players can forfeit the game
 
-# Possible features:
+# Planned features:
 - Cards have skills that change how cards interact with each other
 - Players can draft their own deck at the beginning of a match
 - Spell Cards
