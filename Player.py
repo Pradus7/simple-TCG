@@ -7,26 +7,32 @@ class Deck:
         self._cardCount = 0
         self._size = 30
 
+
     def __str__(self):
         cards = sorted(self._cards, key=lambda card: card.cost)
         return '\n\n'.join([str(card) for card in cards])
     
+
     def __repr__(self):
         return str(self)
     
+
     def addCard(self, card):
         if self._cardCount < self._size:
             self._cards.append(card)
             self._cardCount += 1
     
+
     def removeCard(self):
         if self._cardCount > 0:
             card = self._cards.pop
             self._cardCount -= 1
         return card
 
+
     def shuffle(self):
         random.shuffle(self._cards)
+
 
 class Hand:
     def __init__(self):
@@ -34,10 +40,12 @@ class Hand:
         self._cardCount = 0
         self._size = 8
 
+
     def addCard(self, card):
         if self._cardCount < self._size:
             self._cards.append(card)
             self._cardCount += 1
+    
     
     def removeCard(self):
         if self._cardCount > 0:
@@ -45,12 +53,14 @@ class Hand:
             self._cardCount -= 1
         return card
 
+
 class Player:
     def __init__(self):
         self.deck = Deck()
         self.hand = Hand()
         self.health = 30
         self.maxHealth = 30
+
 
 if __name__ == "__main__":
     names = ["graverobber", "witch", "slave driver", "mechanical golem", "alleyway thief", "assassin", "pirate", 

@@ -24,6 +24,7 @@ class Card:
         self._initHealth = health
         #self._skills = skills
 
+
     #
     @property
     def id(self):
@@ -73,15 +74,18 @@ class Card:
     def initHealth(self):
         return self._initHealth
 
+
     def __str__(self):
         """
         Helper function to visualize the card in the command line
         """
         return f"id:{self.id} N:'{self.name}'\nC:{self.cost} A:{self.damage} H:{self.health}\n"
 
+
     def __repr__(self):
         return str(self)
         
+
     def attack(self, other):
         base_dmg = self.damage
         #check self buffs and debuffs add them to base_dmg
@@ -93,6 +97,7 @@ class Card:
 
         #finally subtract dmg dealt from health and apply to card stat
         other.health = remaining_health
+
 
 if __name__ == "__main__":
     c1 = Card(1, "Squire", 2, 2, 2)
