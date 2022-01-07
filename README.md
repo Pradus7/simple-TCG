@@ -24,3 +24,4 @@ A simple CLI strategy TCG coded in python that allows 2 players to battle each o
 - Cards have skills that change how cards interact with each other
 - Players can draft their own deck at the beginning of a match
 - Spell Cards
+- GUI
