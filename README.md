@@ -17,7 +17,7 @@ A simple CLI based trading card game coded in python that allows 2 players to ba
 - Game has win condition of depleting the other player's health
 - Players draw cards from deck into hand at the beginning of a game
 - Players draw a card from deck into hand at the beginning of a turn
-- Game turns can be ended by the player
+- Game turns can be ended by the current player
 - Players can forfeit the game
 
 # Possible features:
