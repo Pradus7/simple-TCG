@@ -15,3 +15,8 @@ A simple CLI based trading card game coded in python that allows 2 players to ba
 - Cards cost energy to play and cannot be played unless player has sufficient energy
 - Cards can only attack once per turn
 - Game has win condition of depleting the other player's health
+
+# Possible features:
+- Cards have skills that change how cards interact with each other
+- Players can draft their own deck at the beginning of a match
+- Spell Cards
