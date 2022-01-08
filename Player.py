@@ -54,7 +54,10 @@ class Hand:
 
 
     def __str__(self):
-        return str(self._cards)
+        cards = ''
+        for i in range(len(self._cards)):
+            cards += f"{i+1}{str(self._cards[i])}{i+1}\t"
+        return cards
 
 
     def addCard(self, card):
@@ -74,7 +77,8 @@ class Hand:
 
 
 class Player:
-    def __init__(self):
+    def __init__(self, name):
+        self.name = name
         self.deck = Deck()
         self.hand = Hand()
         self.health = 30
@@ -92,10 +96,10 @@ class Player:
 
 if __name__ == "__main__":
 
-    names = ["graverobber", "witch", "gladiator", "mechanical golem", "alleyway thief", "assassin", "pirate", 
-            "warrior", "swordsman", "deadeye", "town guard", "clay golem", "tower mage", "mercenary", "gatekeeper", 
-            "priestess", "merchant", "jailer", "knight", "fortune teller", "necromancer", "squire", "plague doctor", 
-            "steampunk engineer", "soldier", "informant", "templar", "bishop", "holy knight", "wizard"]
+    names = ["graverobber", "witch", "gladiator", "fairy", "thief", "assassin", "pirate", 
+            "warrior", "swordsman", "deadeye", "guard", "clay golem", "archer", "mercenary", "gatekeeper", 
+            "priestess", "merchant", "jailer", "knight", "goblin", "necromancer", "squire", "ogre", 
+            "engineer", "soldier", "horseman", "templar", "bishop", "saint", "wizard"]
 
     random.shuffle(names)
 

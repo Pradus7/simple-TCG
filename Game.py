@@ -19,7 +19,8 @@ class Board:
 
     
     def __str__(self):
-        return f"|\t{self._board[21]}\t|\t{self._board[22]}\t|\t{self._board[23]}\t|\t{self._board[24]}\t|\t{self._board[25]}\t|\n|\t{self._board[11]}\t|\t{self._board[12]}\t|\t{self._board[13]}\t|\t{self._board[14]}\t|\t{self._board[15]}\t|"
+        return (f"|1\t{self._board[21]}\t1|2\t{self._board[22]}\t2|3\t{self._board[23]}\t3|4\t{self._board[24]}\t4|5\t{self._board[25]}\t5|\n"
+                f"|1\t{self._board[11]}\t1|2\t{self._board[12]}\t2|3\t{self._board[13]}\t3|4\t{self._board[14]}\t4|5\t{self._board[15]}\t5|\n")
 
 
     def __repr__(self):
@@ -58,9 +59,10 @@ class Game:
         """
         The Game class allows 2 players to play a game on a Board by placing Cards on the board and damaging each other
         """
-        self.p1 = Player()
-        self.p2 = Player()
+        self.p1 = Player("p1")
+        self.p2 = Player("p2")
         self.board = Board()
+        self.turn = self.p1
 
     
     def play(self, player, cardPos, boardPos):
@@ -70,20 +72,23 @@ class Game:
         if player is self.p1:
             if boardPos not in [11, 12, 13, 14, 15]:
                 print("invalid position")
-                return
+                return 0
 
         if player is self.p2:
             if boardPos not in [21, 22, 23, 24, 25]:
                 print("invalid position")
-                return
+                return 0
         
         if cardPos >= player.hand.cardCount:
             print("you do not have that card in your hand")
-            return
+            return 0
 
         card = player.hand.removeCard(cardPos)
+
         if self.board.addCard(card, boardPos) == 0:
+            player.hand.addCard(card)
             print("invalid position")
+            return 0
 
     
     def attack(self, player, boardPos):
@@ -93,16 +98,19 @@ class Game:
         if player is self.p1:
             if boardPos not in [11, 12, 13, 14, 15]:
                 print("invalid position")
-                return
+                return 0
 
         if player is self.p2:
             if boardPos not in [21, 22, 23, 24, 25]:
                 print("invalid position")
-                return
+                return 0
 
         opponentPos = boardPos + 10 if boardPos < 20 else boardPos - 10
         selfCard = self.board.getCard(boardPos)
         opponentCard = self.board.getCard(opponentPos)
+        if selfCard is None:
+            print("you do not have a card there")
+            return 0
         if opponentCard:
             selfCard.attack(opponentCard)
             if self.board.getCard(opponentPos).health <= 0:
@@ -111,6 +119,56 @@ class Game:
             self.p2.health -= selfCard.attack(opponentCard)
         elif player is self.p2:
             self.p1.health -= selfCard.attack(opponentCard)
+
+
+    def switchTurn(self):
+        """
+        A function that switches turns
+        """
+        if self.turn is self.p1:
+            self.turn = self.p2
+        else:
+            self.turn = self.p1
+
+
+    def takeTurn(self):
+        """
+        A function that allows a player to take a turn
+            In a turn a player can:
+            - draw a card
+            - play their cards
+            - attack with their played cards
+        """
+        print(f"{self.turn.name}'s turn")
+        self.turn.drawCard()
+        while True:
+            choice = input("what do you want to do?\n1. play card\n2. attack\n3. end turn\n")
+            if choice == "1" or choice.lower == "play card" or choice.lower == "play":
+                print(self.board)
+                print(self.turn.hand)
+                cardPos = int(input(f"which card would you like to play?\n"
+                                    f"enter a number between 1 and {self.turn.hand.cardCount}\n")) - 1
+                boardPos = int(input(f"which location would you like to place your card?\n"
+                                     f"enter a number between 1 and 5\n"))
+                boardPos = boardPos + 10 if self.turn is self.p1 else boardPos + 20
+                if not self.play(self.turn, cardPos, boardPos) == 0:
+                    print(self.board)
+                    print("ending turn")
+                    break
+            elif choice == "2" or choice.lower == "attack":
+                print(self.board)
+                print(self.turn.hand)
+                pos = int(input(f"which card would you like to attack with?\n"
+                            f"enter a number between 1 and 5\n"))
+                pos = pos + 10 if self.turn is self.p1 else pos + 20
+                if not self.attack(self.turn, pos) == 0:
+                    print(self.board)
+                    print("ending turn")
+                    break
+            else:
+                print("skipping turn")
+                break
+        self.switchTurn()
 
 
 if __name__ == "__main__":
@@ -124,7 +182,7 @@ if __name__ == "__main__":
             "warrior", "swordsman", "deadeye", "guard", "clay golem", "archer", "mercenary", "gatekeeper", 
             "priestess", "merchant", "jailer", "knight", "goblin", "necromancer", "squire", "ogre", 
             "engineer", "soldier", "horseman", "templar", "bishop", "saint", "wizard"]
-
+ 
     random.shuffle(names)
 
     costList = [1]*4 + [2]*6 + [3]*8 + [4]*9 + [5]*7 + [6]*5 + [7]*3 + [8]*2 + [9]*1
@@ -165,66 +223,15 @@ if __name__ == "__main__":
     
     for i in range(10):
         g.p1.drawCard()
-        print(g.p1.deck.cardCount)
-    for i in range(3):
         g.p2.drawCard()
-        print(g.p2.deck.cardCount)
-
+        
     print(g.p1.hand)
-    print()
-    print(g.p1.hand.cardCount)
-    print(g.p2.hand.cardCount)
+    print(g.p2.hand)
     print()
 
-    g.play(g.p1, 2, 11) #valid
-    g.play(g.p1, 0, 21) #invalid since it's not the player's side of the board
-    g.play(g.p1, 8, 13) #invalid since the player does not have an 8th card in their hand
-    g.play(g.p1, 3, 13) #valid
-    g.play(g.p1, 1, 11) #invalid card already exists at that position
-    g.play(g.p1, 1, 12) #valid
-    g.play(g.p1, 1, 14) #valid
-    g.play(g.p1, 1, 15) #valid
-
-    g.play(g.p2, 2, 11) #invalid side
-    g.play(g.p2, 1, 23) #valid
-    g.play(g.p2, 1, 21) #valid
-    g.play(g.p2, 0, 22) #valid
-    g.play(g.p2, 0, 24) #invalid, hand ran out of cards
-
-    print(g.p1.hand.cardCount)
-    print(g.p2.hand.cardCount)
-    print()
-
+    g.takeTurn()
     print(g.board)
-    print()
     print(g.p1.hand)
-    print()
     print(g.p2.hand)
 
-    g.attack(g.p1, 13)
-
-    print()
-    print(g.board)
-
-    for i in range(3):
-        g.p2.drawCard()
-        print(g.p2.deck.cardCount)
-
-    g.play(g.p2, 0, 23) #valid
-    g.play(g.p2, 0, 24) #valid
-    #g.play(g.p2, 0, 25) #valid
-
-    print()
-    print(g.board)
-
-    g.attack(g.p1, 11)
-    g.attack(g.p1, 12)
-    g.attack(g.p1, 13)
-    g.attack(g.p1, 14)
-    g.attack(g.p1, 15)
-
-    print()
-    print(g.board)
-
-    print(g.p1.health)
-    print(g.p2.health)
+    g.takeTurn()
