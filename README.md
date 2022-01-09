@@ -1,6 +1,8 @@
 # simple-TCG
 A simple CLI strategy TCG coded in python that allows 2 players to battle each other
 
+# Base Game Complete!
+
 # Current features:
 - Players begin with a pseudo-randomly generated 30 card deck
 - Players can draw a card from their deck into their hand
@@ -17,8 +19,6 @@ A simple CLI strategy TCG coded in python that allows 2 players to battle each o
 - Players draw a card from deck into hand at the beginning of a turn
 - Game turns can be ended by the current player
 - Players can forfeit the game
-
-# Base Game Complete!
 
 # Possible features:
 - Cards have skills that change how cards interact with each other
