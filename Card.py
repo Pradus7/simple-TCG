@@ -17,13 +17,12 @@ class Card:
         self._id = id
         self._name = name
         self._cost = cost
-
         self._damage = damage
         self._initDmg = damage
-        
         self._health = health
         self._maxHealth = health
         self._initHealth = health
+        self.attacked = False
         #self._skills = skills #to be implemented
 
 
@@ -89,6 +88,10 @@ class Card:
         
 
     def attack(self, other):
+        """
+        A function that allows a card to damage another card
+            returns the amount of damage being dealth to the opposing card
+        """
         base_dmg = self.damage
         #check self buffs and debuffs add them to base_dmg
         total_dmg = base_dmg + 0

@@ -9,8 +9,6 @@ A simple CLI strategy TCG coded in python that allows 2 players to battle each o
 - Cards attacking an empty board space deal direct damage to the player
 - Game removes cards that run out of health from the game board
 - Game provides a turn based system that alternates between p1 and p2
-
-# Upcoming features:
 - Game adds 1 max energy up to 10 to each player at the beginning of their respective turns and refills their energy
 - Cards cost energy to play and cannot be played unless player has sufficient energy
 - Cards can only attack once per turn
@@ -20,7 +18,9 @@ A simple CLI strategy TCG coded in python that allows 2 players to battle each o
 - Game turns can be ended by the current player
 - Players can forfeit the game
 
-# Planned features:
+# Base Game Complete!
+
+# Possible features:
 - Cards have skills that change how cards interact with each other
 - Players can draft their own deck at the beginning of a match
 - Spell Cards
