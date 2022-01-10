@@ -188,7 +188,7 @@ class Game:
 
         while True:
             self.printTurnInfo()
-            choice = input(f"what do you want to do?\n1. play card\n2. attack\n3. end turn\n"
+            choice = input(f"what do you want to do?\n1. play card\n2. attack\n3. end turn\n4.surrender\n"
                            f"\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
 
             if choice == "1" or choice.lower == "play card" or choice.lower == "play":
@@ -222,9 +222,16 @@ class Game:
                               f"\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
                         return 1
 
-            else:
+            elif choice == "3" or choice.lower == "end turn" or choice.lower == "end":
                 print("ending turn\n\n\n")
                 break
+            
+            elif choice == "4" or choice.lower == "surrender":
+                print(f"Player {self.turn} surrendered!")
+                print(f"Player {self.opponent()} won!")
+                return 1
+            else:
+                print("\ninvalid action\n")
             
         self.switchTurn()
 
