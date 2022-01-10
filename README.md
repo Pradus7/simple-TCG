@@ -2,6 +2,7 @@
 A simple CLI strategy TCG coded in python that allows 2 players to battle each other
 
 # Base Game Complete!
+To play simply download all the .py files and run Game.py!
 
 # Current features:
 - Players begin with a pseudo-randomly generated 30 card deck
